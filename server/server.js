@@ -5,7 +5,7 @@ const path      = require ('path');
 const http      = require ('http');
 const express   = require ('express');
 const socketIO  = require ('socket.io');
-const {generatemessage} = require ('./utils/message');
+const {generateMessage} = require ('./utils/message');
 
 /// Serving static files in Express
 const publicPath = path.join (__dirname, '../public');
@@ -28,9 +28,10 @@ io.on ('connection', (socket) => {
     socket.broadcast.emit ('newMessage', generateMessage('Admin', "New user joined"));
 
 
-    socket.on ('createMessage', (message) => {
+    socket.on ('createMessage', (message, callback) => {
         console.log ("Received Message: ", message);
         io.emit ('newMessage', generateMessage(message.from, message.text));
+        callback('This is from the server');
         // socket.broadcast.emit ('newMessage', {
         //       from: message.from,
         //       text: message.text,
